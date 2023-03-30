@@ -13,6 +13,13 @@ app.use(express.json())
 
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')))
 
+app.get('/api/list', async (req, res, next)=>{
+    const data = await List.findAll();
+    res.send(data);
+})
+
+
+
 
 const init = async () =>{
     try{

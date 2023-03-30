@@ -1,5 +1,8 @@
 import React, {Component} from "react";
+import { HashRouter as Router, Route } from 'react-router-dom';
 
+import Nav from './Nav';
+import Home from './Home';
 
 class App extends Component{
     constructor(){
@@ -7,11 +10,11 @@ class App extends Component{
     }
     render(){
         return(
-            <div>
-                <h1>
-                    Hello World!!
-                </h1>
-            </div>
+            <Router>
+                    <Route component={Nav}/>
+                    <Route component={Home}/>
+
+            </Router>
         )
     }
 }
