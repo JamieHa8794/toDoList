@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "nodemon server"
+    "build": "webpack",
+    "build-dev": "npm run build -- --mode=development --watch",
+    "start-dev": "nodemon server --ignore src --ignore dist & npm run build-dev"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^9.1.2",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
     "webpack": "^5.77.0",
