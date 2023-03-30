@@ -2,22 +2,12 @@ const {db, syncAndSeed, models: {List}} = require('./db/index')
 
 const express = require('express');
 const app = express();
+const path = require('path')
 
 
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
-
-app.get('/', (req, res, next)=>{
-    const html = `
-    <html>
-        <head>
-        </head>
-        <body>
-            <h1>Hello World</h1>
-        </body>
-    </html>
-    `
-    res.send(html)
-})
+app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')))
 
 
 const init = async () =>{
