@@ -2,3 +2,6 @@ body{
     background-color: cornflowerblue;
     color: white;
 }
+.crossedOut{
+    text-decoration: line-through;
+}

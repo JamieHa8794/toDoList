@@ -13,7 +13,7 @@ class App extends Component{
     render(){
         return(
             <Router>
-                    <Route component={Nav}/>
+                    {/* <Route component={Nav}/> */}
                     <Route component={Home}/>
             </Router>
         )
