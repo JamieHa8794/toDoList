@@ -18,6 +18,11 @@ app.get('/api/list', async (req, res, next)=>{
     res.send(data);
 })
 
+app.post('/api/list', async (req, res, next)=>{
+    const item = req.body.newItem
+    const data = await List.create({item: item}).data
+    res.send(data)
+})
 
 
 

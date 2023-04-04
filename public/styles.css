@@ -2,6 +2,9 @@ body{
     background-color: cornflowerblue;
     color: white;
 }
+li{
+    list-style: none;
+}
 .crossedOut{
     text-decoration: line-through;
 }
