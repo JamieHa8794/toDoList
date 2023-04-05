@@ -14,16 +14,35 @@ app.use(express.json())
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')))
 
 app.get('/api/list', async (req, res, next)=>{
-    const data = await List.findAll();
-    res.send(data);
+    try{
+        const data = await List.findAll();
+        res.send(data);
+    }
+    catch(err){
+        res.send(err)
+    }
 })
 
 app.post('/api/list', async (req, res, next)=>{
-    const item = req.body.newItem
-    const data = await List.create({item: item}).data
-    res.send(data)
+    try{
+        const item = req.body.newItem
+        res.status(201).send(await List.create({item: item}));
+    }
+    catch(err){
+        res.send(err)
+    }
 })
 
+app.delete('/api/list/:id', async (req, res, next)=>{
+    try{
+        const listItem = await List.findByPk(req.params.id)
+        await listItem.destroy();
+        res.sendStatus(204);
+    }
+    catch(err){
+        next(err)
+    }
+})
 
 
 const init = async () =>{

@@ -12,6 +12,7 @@ ul{
 li{
     list-style: none;
     font-size: 22px;
+    padding-right: 10px;
 }
 .main-box{
     display: flex;
@@ -36,4 +37,8 @@ li{
 .emptyList-message{
     padding-top: 5px;
     padding-bottom: 15px;
+}
+.listItem{
+    display: flex;
+    flex-direction: row;
 }

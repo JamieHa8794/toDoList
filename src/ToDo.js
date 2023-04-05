@@ -16,6 +16,7 @@ class ToDo extends Component{
         this.onClick = this.onClick.bind(this)
         this.addNewItem = this.addNewItem.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this.deleteItem = this.deleteItem.bind(this)
 
     }
     async componentDidMount(){
@@ -37,10 +38,20 @@ class ToDo extends Component{
     addNewItem(event){
         this.setState({newItem: event.target.value})
     }
+    async deleteItem(itemID){
+        console.log(itemID)
+        await (axios.delete(`/api/list/${itemID}`));
+
+        const data = (await axios.get('/api/list')).data;
+        this.setState({
+            list: data,
+            newItem: '',
+        })
+    }
     async onSubmit(event){
         event.preventDefault()
         const {newItem} = this.state;
-        const newlyAddedItem = (await axios.post('/api/list', {newItem})).data
+        const updatedData = (await axios.post('/api/list', {newItem})).data
 
         const data = (await axios.get('/api/list')).data;
         this.setState({
@@ -50,7 +61,7 @@ class ToDo extends Component{
     }
     render(){
         const {list, crossedOut, newItem} = this.state;
-        const {onClick, addNewItem, onSubmit} = this
+        const {onClick, addNewItem, onSubmit, deleteItem} = this
 
         if(list.length === 0){
             return(
@@ -98,9 +109,12 @@ class ToDo extends Component{
                         <ul>
                             {list.map((listItem, idx) =>{
                                 return(
+                                    <div className='listItem'>
                                     <li key={idx} className={crossedOut[listItem.item] ? 'crossedOut' : 'notCrosssedOut'} onClick={()=>onClick(listItem.item)}>
                                         {listItem.item}
                                     </li>
+                                    <button onClick={()=>deleteItem(listItem.id)}>x</button>
+                                    </div>
                                 )
                             })}
                         </ul>
