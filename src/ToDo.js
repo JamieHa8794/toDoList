@@ -36,28 +36,34 @@ class ToDo extends Component{
         this.setState({crossedOut})
     }
     addNewItem(event){
-        this.setState({newItem: event.target.value})
+        this.setState({newItem: event.target.value.trim()})
     }
     async deleteItem(itemID){
-        console.log(itemID)
         await (axios.delete(`/api/list/${itemID}`));
 
         const data = (await axios.get('/api/list')).data;
         this.setState({
             list: data,
-            newItem: '',
         })
     }
     async onSubmit(event){
         event.preventDefault()
-        const {newItem} = this.state;
-        const updatedData = (await axios.post('/api/list', {newItem})).data
+        const {list, newItem} = this.state;
 
-        const data = (await axios.get('/api/list')).data;
-        this.setState({
-            list: data,
-            newItem: '',
-        })
+        if(newItem === ''){
+            window.alert('Please enter an item')
+        }
+        else{
+            const updatedData = (await axios.post('/api/list', {newItem})).data
+    
+            list.push(updatedData)
+    
+            this.setState({
+                list: list,
+                newItem: '',
+            })
+        }
+
     }
     render(){
         const {list, crossedOut, newItem} = this.state;
