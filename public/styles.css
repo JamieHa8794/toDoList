@@ -1,10 +1,34 @@
 body{
     background-color: cornflowerblue;
     color: white;
+    font-family: fantasy;
+}
+h1{
+    margin-bottom: 0px;
+}
+ul{
+    padding: 0px;
 }
 li{
     list-style: none;
+    font-size: 22px;
+}
+.main-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.toDo-Container{
+    min-width: 500px;
+    min-height: 500px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .crossedOut{
     text-decoration: line-through;
 }
+

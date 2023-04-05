@@ -4,7 +4,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 
 import Nav from './Nav';
 import Home from './Home';
-import ToDoList from "./toDoList";
+import ToDo from "./ToDo";
 
 
 class App extends Component{
@@ -15,8 +15,8 @@ class App extends Component{
         return(
             <Router>
                     {/* <Route component={Nav}/> */}
-                    <Route component={Home}/>
-                    <Route component={ToDoList}/>
+                    {/* <Route component={Home}/> */}
+                    <Route component={ToDo}/>
 
             </Router>
         )
