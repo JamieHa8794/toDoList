@@ -51,15 +51,45 @@ class ToDo extends Component{
     render(){
         const {list, crossedOut, newItem} = this.state;
         const {onClick, addNewItem, onSubmit} = this
+
+        if(list.length === 0){
+            return(
+                <div className='main-box'>
+                <Paper 
+                elevation={3} 
+                sx={{
+                    minWidth: 7/10,
+                    minHeight: 1,
+                    maxWidth: 1,
+                  }}
+                >
+                    <div className='toDo-Container'>
+                        <h1>
+                            Shopping List:
+                        </h1>
+                        <div className='emptyList-message'>
+                            Theres nothing on your list... add something to get started!
+                        </div>
+                        <form>
+                            <input name='newItem' value={newItem} onChange={addNewItem}></input>
+                            <button onClick={onSubmit}>Add Item</button>
+                        </form>
+                    </div>
+                </Paper>
+            </div>
+            )
+        }
+
+
         return(
             <div className='main-box'>
                 <Paper 
                 elevation={3} 
-                // sx={{
-                //     minWidth: 300,
-                //     minHeight: 300,
-
-                //   }}
+                sx={{
+                    minWidth: 7/10,
+                    minHeight: 1,
+                    maxWidth: 1,
+                  }}
                 >
                     <div className='toDo-Container'>
                         <h1>

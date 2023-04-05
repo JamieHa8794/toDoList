@@ -16,18 +16,11 @@ const List = db.define('list', {
 }) 
 
 
-const baseList = ['apple', 'bananas', 'carrots']
 
 
 const syncAndSeed = async () =>{
     try{
         await db.sync({force: true})
-
-        await Promise.all(baseList.map(itemName=>{
-            List.create({
-                item: itemName
-            })
-        }))
         console.log('connected to db')
     }
     catch(err){

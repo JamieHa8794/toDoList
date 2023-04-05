@@ -1,6 +1,6 @@
 body{
-    background-color: cornflowerblue;
-    color: white;
+    background-color: #779669;
+    color: #779669;
     font-family: fantasy;
 }
 h1{
@@ -18,6 +18,8 @@ li{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    margin: 10%;
 }
 .toDo-Container{
     min-width: 500px;
@@ -31,4 +33,7 @@ li{
 .crossedOut{
     text-decoration: line-through;
 }
-
+.emptyList-message{
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
