@@ -12,6 +12,10 @@ const List = db.define('list', {
     item: {
         type: STRING,
         allowNull: false
+    },
+    date:{
+        type: STRING,
+
     }
 }) 
 
