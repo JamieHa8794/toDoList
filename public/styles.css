@@ -42,3 +42,15 @@ li{
     display: flex;
     flex-direction: row;
 }
+
+.week-bar{
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.week-bar-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
