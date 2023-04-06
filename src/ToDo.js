@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
-import axios from "axios";
+import {addListItem} from './store'
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -18,14 +18,6 @@ class ToDo extends Component{
         this.addNewItem = this.addNewItem.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
-    }
-    async componentDidMount(){
-        const today = new Date()
-        const data = (await axios.get('/api/lists')).data;
-        this.setState({
-            list: data,
-            date: today
-        })
     }
     onClick(item){
         const {crossedOut} = this.state
@@ -45,35 +37,30 @@ class ToDo extends Component{
     async deleteItem(itemID){
         await (axios.delete(`/api/lists/${itemID}`));
 
-        const data = (await axios.get('/api/lists')).data;
-        this.setState({
-            list: data,
-        })
     }
     async onSubmit(event){
         event.preventDefault()
-        const {list, newItem, selectedDate} = this.state;
+        const {list, newItem} = this.state;
+        const {lists, pageDate} = this.props.state
+        const {addListItem} = this.props
 
         if(newItem === ''){
             window.alert('Please enter an item')
         }
         else{
-            const updatedData = (await axios.post('/api/lists', {newItem, selectedDate})).data
-    
-            list.push(updatedData)
-    
+            addListItem(newItem, pageDate)
             this.setState({
-                list: list,
                 newItem: '',
             })
         }
 
     }
     render(){
-        const {list, crossedOut, newItem} = this.state;
+        const {crossedOut, newItem} = this.state;
+        const {lists} = this.props.state
         const {onClick, addNewItem, onSubmit, deleteItem} = this
 
-        if(list.length === 0){
+        if(lists.length === 0){
             return(
                 <div className='main-box'>
                 <Paper 
@@ -100,8 +87,6 @@ class ToDo extends Component{
             </div>
             )
         }
-
-
         return(
             <div className='main-box'>
                 <Paper 
@@ -117,7 +102,7 @@ class ToDo extends Component{
                             Shopping List:
                         </h1>
                         <ul>
-                            {list.map((listItem, idx) =>{
+                            {lists.map((listItem, idx) =>{
                                 return(
                                     <div className='listItem'>
                                     <li key={idx} className={crossedOut[listItem.item] ? 'crossedOut' : 'notCrosssedOut'} onClick={()=>onClick(listItem.item)}>
@@ -149,7 +134,9 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) =>{
     return {
-
+        addListItem: (newItem, pageDate) =>{
+            dispatch(addListItem(newItem, pageDate))
+       },
     }
 }
 

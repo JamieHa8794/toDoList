@@ -26,10 +26,11 @@ app.get('/api/lists', async (req, res, next)=>{
 app.post('/api/lists', async (req, res, next)=>{
     try{
         const item = req.body.newItem
-        const date = req.body.selectedDate
+        const pageDate = req.body.pageDate
+        console.log(item, pageDate)
         res.status(201).send(await List.create({
             item: item,
-            date: selectedDate,
+            date: pageDate,
         }));
     }
     catch(err){

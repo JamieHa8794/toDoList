@@ -15,16 +15,22 @@ const List = db.define('list', {
     },
     date:{
         type: STRING,
-
     }
 }) 
 
 
-
+const baseList = ['apple', 'bananas', 'carrots']
+const today = new Date().toDateString();
 
 const syncAndSeed = async () =>{
     try{
         await db.sync({force: true})
+        await Promise.all(baseList.map(itemName=>{
+            List.create({
+                item: itemName,
+                date: today
+            })
+        }))
         console.log('connected to db')
     }
     catch(err){

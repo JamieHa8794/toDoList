@@ -10,6 +10,7 @@ const todaysdate = new Date();
 const LOADED = 'LOADED'
 const LOAD_LISTS = 'LOAD_LISTS'
 const SET_DATE = 'SET_DATE'
+const ADD_LIST_ITEM = 'ADD_LIST_ITEM'
 
 //reducers
 
@@ -23,6 +24,9 @@ const loadReducers = (state = true, action)=>{
 const listsReducers = (state = [], action) =>{
     if(action.type === LOAD_LISTS){
         state = action.lists
+    }
+    else if(action.type === ADD_LIST_ITEM){
+        state = [...state, action.listItem]
     }
     return state;
 }
@@ -68,6 +72,12 @@ const _setDate = (date) =>{
     }
 }
 
+const _addListItem = (listItem) =>{
+    return {
+        type: ADD_LIST_ITEM,
+        listItem
+    }
+}
 
 //thunks
 const loading = () =>{
@@ -107,6 +117,15 @@ const resetDay = (history) =>{
 }
 
 
+const addListItem = (newItem, pageDate) =>{
+    return async (dispatch) =>{
+        console.log('here')
+        const listItem = (await axios.post('/api/lists', {newItem, pageDate})).data;
+        dispatch(_addListItem(listItem));
+    }
+}
+
+
 
 export default store;
-export {loading, loadLists, addDay, subtractDay, resetDay}
+export {loading, loadLists, addDay, subtractDay, resetDay, addListItem}

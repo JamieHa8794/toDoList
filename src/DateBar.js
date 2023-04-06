@@ -38,8 +38,6 @@ class DateBar extends Component{
         const {lists, pageDate} = this.props.state
         const {addDay, subtractDay, resetDay} = this
 
-        console.log(lists)
-        console.log(pageDate)
 
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const convertDay = (1000 * 3600 * 24)
