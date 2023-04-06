@@ -23,9 +23,10 @@ class DateBar extends Component{
         const prevDate = new Date(Number(today))
         prevDate.setDate(today.getDate() - 1)
 
+        const nextDate = new Date(Number(today))
+        nextDate.setDate(today.getDate() + 1)
 
         const weekArr = [];
-   
 
         for(let i = 0; i < today.getDay(); i++){
             const newNextDate = new Date(Number(today))
@@ -41,7 +42,6 @@ class DateBar extends Component{
             
             weekArr.push(newNextDate)
         }
-
 
         const weekDays = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
 
@@ -60,7 +60,7 @@ class DateBar extends Component{
                                 <div className='week-bar-weekDay'>
                                     {weekDays[day.getDay()]}
                                 </div>
-                                <div className='week-bar-date'>
+                                <div className={`week-bar-date ${day.getDate()===today.getDate() ? 'today' : ''}`}>
                                     {day.getDate()}
                                 </div>
                             </div>
