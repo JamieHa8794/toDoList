@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
-import {addListItem} from './store'
+import {addListItem, removeListItem} from './store'
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -32,23 +32,25 @@ class ToDo extends Component{
         this.setState({crossedOut})
     }
     addNewItem(event){
-        this.setState({newItem: event.target.value.trim()})
+        this.setState({newItem: event.target.value})
     }
-    async deleteItem(itemID){
-        await (axios.delete(`/api/lists/${itemID}`));
+    deleteItem(listItem){
+        const {removeListItem} = this.props;
+        removeListItem(listItem);
 
     }
-    async onSubmit(event){
+    onSubmit(event){
         event.preventDefault()
-        const {list, newItem} = this.state;
-        const {lists, pageDate} = this.props.state
+        const {newItem} = this.state;
+        const {pageDate} = this.props.state
         const {addListItem} = this.props
 
-        if(newItem === ''){
+
+        if(newItem.trim() === ''){
             window.alert('Please enter an item')
         }
         else{
-            addListItem(newItem, pageDate)
+            addListItem(newItem, pageDate.toDateString())
             this.setState({
                 newItem: '',
             })
@@ -57,10 +59,16 @@ class ToDo extends Component{
     }
     render(){
         const {crossedOut, newItem} = this.state;
-        const {lists} = this.props.state
+        const {lists, pageDate} = this.props.state
         const {onClick, addNewItem, onSubmit, deleteItem} = this
 
-        if(lists.length === 0){
+        let pageList
+
+        if(lists.length  > 0){
+            pageList = lists.filter(listItem => listItem.date === pageDate.toDateString())
+        }
+
+        if(lists.length === 0 || pageList.length === 0){
             return(
                 <div className='main-box'>
                 <Paper 
@@ -87,28 +95,31 @@ class ToDo extends Component{
             </div>
             )
         }
+
+
+
         return(
             <div className='main-box'>
                 <Paper 
                 elevation={3} 
                 sx={{
-                    minWidth: 7/10,
+                    minWidth: 6/10,
                     minHeight: 1,
                     maxWidth: 1,
                   }}
                 >
                     <div className='toDo-Container'>
                         <h1>
-                            Shopping List:
+                            To Do:
                         </h1>
                         <ul>
-                            {lists.map((listItem, idx) =>{
+                            {pageList.map((listItem, idx) =>{
                                 return(
                                     <div className='listItem'>
                                     <li key={idx} className={crossedOut[listItem.item] ? 'crossedOut' : 'notCrosssedOut'} onClick={()=>onClick(listItem.item)}>
                                         {listItem.item}
                                     </li>
-                                    <button onClick={()=>deleteItem(listItem.id)}>x</button>
+                                    <button onClick={()=>deleteItem(listItem)}>x</button>
                                     </div>
                                 )
                             })}
@@ -137,6 +148,9 @@ const mapDispatchToProps = (dispatch) =>{
         addListItem: (newItem, pageDate) =>{
             dispatch(addListItem(newItem, pageDate))
        },
+       removeListItem: (listItem) =>{
+        dispatch(removeListItem(listItem))
+   },
     }
 }
 

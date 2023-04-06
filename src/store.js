@@ -11,6 +11,7 @@ const LOADED = 'LOADED'
 const LOAD_LISTS = 'LOAD_LISTS'
 const SET_DATE = 'SET_DATE'
 const ADD_LIST_ITEM = 'ADD_LIST_ITEM'
+const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
 
 //reducers
 
@@ -25,8 +26,11 @@ const listsReducers = (state = [], action) =>{
     if(action.type === LOAD_LISTS){
         state = action.lists
     }
-    else if(action.type === ADD_LIST_ITEM){
+    if(action.type === ADD_LIST_ITEM){
         state = [...state, action.listItem]
+    }
+    if(action.type === REMOVE_LIST_ITEM){
+        state = state.filter(listItem => listItem.id !== action.listItem.id);
     }
     return state;
 }
@@ -79,6 +83,13 @@ const _addListItem = (listItem) =>{
     }
 }
 
+const _removeListItem = (listItem) =>{
+    return {
+        type: REMOVE_LIST_ITEM,
+        listItem
+    }
+}
+
 //thunks
 const loading = () =>{
     return (dispatch) =>{
@@ -119,13 +130,19 @@ const resetDay = (history) =>{
 
 const addListItem = (newItem, pageDate) =>{
     return async (dispatch) =>{
-        console.log('here')
         const listItem = (await axios.post('/api/lists', {newItem, pageDate})).data;
         dispatch(_addListItem(listItem));
+    }
+}
+
+const removeListItem = (listItem) =>{
+    return async (dispatch) =>{
+        await (axios.delete(`/api/lists/${listItem.id}`));
+        dispatch(_removeListItem(listItem))
     }
 }
 
 
 
 export default store;
-export {loading, loadLists, addDay, subtractDay, resetDay, addListItem}
+export {loading, loadLists, addDay, subtractDay, resetDay, addListItem, removeListItem}
