@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 import { HashRouter as Router, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+
+import {loading, loadLists} from './store'
 
 
 import Nav from './Nav';
@@ -8,9 +12,12 @@ import ToDo from "./ToDo";
 import DateBar from "./DateBar";
 
 
-class App extends Component{
+class _App  extends Component{
     constructor(){
         super();
+    }
+    componentDidMount(){
+        this.props.load();
     }
     render(){
         return(
@@ -25,4 +32,24 @@ class App extends Component{
     }
 }
 
-export default App;
+
+
+
+const mapStateToProps = (state) =>{
+    return {
+        state
+    }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        load: () =>{
+           dispatch(loadLists())
+           dispatch(loading())
+       },
+    }
+}
+
+const App = connect(mapStateToProps, mapDispatchToProps)(_App)
+
+export default App

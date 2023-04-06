@@ -13,7 +13,7 @@ app.use(express.json())
 
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')))
 
-app.get('/api/list', async (req, res, next)=>{
+app.get('/api/lists', async (req, res, next)=>{
     try{
         const data = await List.findAll();
         res.send(data);
@@ -23,17 +23,21 @@ app.get('/api/list', async (req, res, next)=>{
     }
 })
 
-app.post('/api/list', async (req, res, next)=>{
+app.post('/api/lists', async (req, res, next)=>{
     try{
         const item = req.body.newItem
-        res.status(201).send(await List.create({item: item}));
+        const date = req.body.selectedDate
+        res.status(201).send(await List.create({
+            item: item,
+            date: selectedDate,
+        }));
     }
     catch(err){
         res.send(err)
     }
 })
 
-app.delete('/api/list/:id', async (req, res, next)=>{
+app.delete('/api/lists/:id', async (req, res, next)=>{
     try{
         const listItem = await List.findByPk(req.params.id)
         await listItem.destroy();

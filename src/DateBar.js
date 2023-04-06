@@ -1,4 +1,12 @@
 import React, {Component} from 'react'
+import { connect } from 'react-redux';
+
+import {addDay, subtractDay, resetDay} from './store'
+
+
+import Button from '@mui/material/Button';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 
 class DateBar extends Component{
@@ -6,39 +14,63 @@ class DateBar extends Component{
         super();
         this.state = {
             date: ''
-        }
-        
+        }        
+        this.addDay = this.addDay.bind(this)
+        this.subtractDay = this.subtractDay.bind(this)
+        this.resetDay = this.resetDay.bind(this)
+    }
+    addDay(){
+        const {pageDate} = this.props.state
+        const {addDay, history} = this.props;
+        addDay(pageDate, history);
+
+    }
+    subtractDay(){
+        const {pageDate} = this.props.state
+        const {subtractDay, history} = this.props;
+        subtractDay(pageDate, history);
+    }
+    resetDay(){
+        const {resetDay, history} = this.props;
+        resetDay(history);
     }
     render(){
+        const {lists, pageDate} = this.props.state
+        const {addDay, subtractDay, resetDay} = this
+
+        console.log(lists)
+        console.log(pageDate)
+
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const convertDay = (1000 * 3600 * 24)
-        const today = new Date()
-        const month = months[today.getMonth()];
-        const day = today.getDate();
-        const year = today.getFullYear();
+        const date = pageDate
+        const month = months[date.getMonth()];
+        const day = date.getDate();
+        const year = date.getFullYear();
         // console.log(month, day, year)
         const fullDate = month + ' ' + day + ', ' + year;
-        // const today = new Date()
+        const today = new Date()
 
-        const prevDate = new Date(Number(today))
-        prevDate.setDate(today.getDate() - 1)
 
-        const nextDate = new Date(Number(today))
-        nextDate.setDate(today.getDate() + 1)
+        const nextDate = new Date(Number(date))
+        nextDate.setDate(date.getDate() + 1)
+
+        const prevDate = new Date(Number(date))
+        prevDate.setDate(date.getDate() - 1)
 
         const weekArr = [];
 
-        for(let i = 0; i < today.getDay(); i++){
-            const newNextDate = new Date(Number(today))
-            newNextDate.setDate(today.getDate() - (today.getDay()-i))
+        for(let i = 0; i < pageDate.getDay(); i++){
+            const newNextDate = new Date(Number(pageDate))
+            newNextDate.setDate(pageDate.getDate() - (pageDate.getDay()-i))
             
             weekArr.push(newNextDate)
         }
 
 
-        for(let i = 0; i < (7-today.getDay()); i++){
-            const newNextDate = new Date(Number(today))
-            newNextDate.setDate(today.getDate() + (i))
+        for(let i = 0; i < (7-pageDate.getDay()); i++){
+            const newNextDate = new Date(Number(pageDate))
+            newNextDate.setDate(pageDate.getDate() + (i))
             
             weekArr.push(newNextDate)
         }
@@ -48,11 +80,8 @@ class DateBar extends Component{
         return(
             <div className='main-box'>
                 <h1>
-                    Date Bar
-                </h1>
-                <h3>
                     {month}
-                </h3>
+                </h1>
                 <div className='week-bar'>
                     {weekArr.map(day =>{
                         return(
@@ -60,7 +89,7 @@ class DateBar extends Component{
                                 <div className='week-bar-weekDay'>
                                     {weekDays[day.getDay()]}
                                 </div>
-                                <div className={`week-bar-date ${day.getDate()===today.getDate() ? 'today' : ''}`}>
+                                <div className={`week-bar-date ${day.getDate()===today.getDate() ? 'today' : ''} ${day.getDate()===pageDate.getDate() ? 'pageDate' : ''}`}>
                                     {day.getDate()}
                                 </div>
                             </div>
@@ -68,9 +97,65 @@ class DateBar extends Component{
                         
                     })}
                 </div>
+
+                <div className='dateButtons'>
+                        <Button
+                        disabled={false}
+                        size="large"
+                        variant="filledTonal"
+                        startIcon={<ArrowBackIosIcon />}
+                        onClick={subtractDay}
+                        sx={{ width: 190 }}
+                        >
+                        {prevDate.toDateString()}
+                        </Button>
+                        <Button
+                        onClick={resetDay}
+                        sx={{
+                            color: '#697796'
+                        }}
+                        >Today</Button>
+
+                        <Button
+                        disabled={false}
+                        size="large"
+                        variant="filledTonal"
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={addDay}
+                        sx={{ 
+                            width: 190,
+                        }}
+                        >
+                        {nextDate.toDateString()}
+                        </Button>
+                    </div>
+
+
             </div>
         )
     }
 }
 
-export default DateBar;
+
+const mapStateToProps = (state) =>{
+    return {
+        state
+    }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+    return {
+       addDay: (date, history) =>{
+            dispatch(addDay(date, history))
+       },
+       subtractDay: (date, history) =>{
+            dispatch(subtractDay(date, history))
+       },
+       resetDay: (history) =>{
+            dispatch(resetDay(history))
+       }
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateBar)

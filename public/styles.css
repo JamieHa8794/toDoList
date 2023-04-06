@@ -20,7 +20,10 @@ li{
     justify-content: center;
     align-items: center;
 
-    margin: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 2%;
+
 }
 .toDo-Container{
     min-width: 500px;
@@ -60,6 +63,10 @@ li{
     width: 25px;
 }
 .today{
+    border: solid #886996;
+    border-radius: 50%;
+}
+.pageDate{
     background-color: #886996;
     border-radius: 50%;
 }

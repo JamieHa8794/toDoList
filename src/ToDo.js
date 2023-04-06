@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+
 import axios from "axios";
 
 import Box from '@mui/material/Box';
@@ -11,17 +13,19 @@ class ToDo extends Component{
             list: [],
             crossedOut: {},
             newItem: '',
-
         }
         this.onClick = this.onClick.bind(this)
         this.addNewItem = this.addNewItem.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
-
     }
     async componentDidMount(){
-        const data = (await axios.get('/api/list')).data;
-        this.setState({list: data})
+        const today = new Date()
+        const data = (await axios.get('/api/lists')).data;
+        this.setState({
+            list: data,
+            date: today
+        })
     }
     onClick(item){
         const {crossedOut} = this.state
@@ -39,22 +43,22 @@ class ToDo extends Component{
         this.setState({newItem: event.target.value.trim()})
     }
     async deleteItem(itemID){
-        await (axios.delete(`/api/list/${itemID}`));
+        await (axios.delete(`/api/lists/${itemID}`));
 
-        const data = (await axios.get('/api/list')).data;
+        const data = (await axios.get('/api/lists')).data;
         this.setState({
             list: data,
         })
     }
     async onSubmit(event){
         event.preventDefault()
-        const {list, newItem} = this.state;
+        const {list, newItem, selectedDate} = this.state;
 
         if(newItem === ''){
             window.alert('Please enter an item')
         }
         else{
-            const updatedData = (await axios.post('/api/list', {newItem})).data
+            const updatedData = (await axios.post('/api/lists', {newItem, selectedDate})).data
     
             list.push(updatedData)
     
@@ -73,7 +77,7 @@ class ToDo extends Component{
             return(
                 <div className='main-box'>
                 <Paper 
-                elevation={3} 
+                elevation={5} 
                 sx={{
                     minWidth: 7/10,
                     minHeight: 1,
@@ -135,4 +139,20 @@ class ToDo extends Component{
     }
 }
 
-export default ToDo;
+
+
+const mapStateToProps = (state) =>{
+    return {
+        state
+    }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+    return {
+
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToDo)
+
