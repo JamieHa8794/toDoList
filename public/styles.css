@@ -68,5 +68,6 @@ li{
 }
 .pageDate{
     background-color: #886996;
+    border: solid #886996;
     border-radius: 50%;
 }

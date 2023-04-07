@@ -72,7 +72,7 @@ class ToDo extends Component{
                 <Paper 
                 elevation={5} 
                 sx={{
-                    minWidth: 7/10,
+                    minWidth: 6/10,
                     minHeight: 1,
                     maxWidth: 1,
                   }}
