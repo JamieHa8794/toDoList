@@ -12,6 +12,7 @@ const LOAD_LISTS = 'LOAD_LISTS'
 const SET_DATE = 'SET_DATE'
 const ADD_LIST_ITEM = 'ADD_LIST_ITEM'
 const REMOVE_LIST_ITEM = 'REMOVE_LIST_ITEM'
+const COMPLETED_LIST_ITEM = 'COMPLETED_LIST_ITEM'
 
 //reducers
 
@@ -31,6 +32,9 @@ const listsReducers = (state = [], action) =>{
     }
     if(action.type === REMOVE_LIST_ITEM){
         state = state.filter(listItem => listItem.id !== action.listItem.id);
+    }
+    if(action.type === COMPLETED_LIST_ITEM){
+        state = state.map(listItem => listItem.id !== action.listItem.id ? listItem : action.listItem)
     }
     return state;
 }
@@ -90,6 +94,14 @@ const _removeListItem = (listItem) =>{
     }
 }
 
+const _completedListItem = (listItem) =>{
+    return {
+        type: COMPLETED_LIST_ITEM,
+        listItem
+    }
+}
+
+
 //thunks
 const loading = () =>{
     return (dispatch) =>{
@@ -142,7 +154,14 @@ const removeListItem = (listItem) =>{
     }
 }
 
-
+//change between completed and not completed
+const completedListItem = (listItem, completed) =>{
+    return async (dispatch) =>{
+        const _listItem =  (await (axios.put(`/api/lists/${listItem.id}`, {completed}))).data;
+        console.log(_listItem)
+        dispatch(_completedListItem(_listItem))
+    }
+}
 
 export default store;
-export {loading, loadLists, addDay, subtractDay, resetDay, addListItem, removeListItem}
+export {loading, loadLists, addDay, subtractDay, resetDay, addListItem, removeListItem, completedListItem}

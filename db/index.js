@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const {UUID, UUIDV4, STRING} = Sequelize;
+const {UUID, UUIDV4, STRING, BOOLEAN} = Sequelize;
 const db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/todolist');
 
 
@@ -15,7 +15,10 @@ const List = db.define('list', {
     },
     date:{
         type: STRING,
-    }
+    }, 
+    completed:{
+        type: BOOLEAN
+    },
 }) 
 
 
@@ -28,7 +31,8 @@ const syncAndSeed = async () =>{
         await Promise.all(baseList.map(itemName=>{
             List.create({
                 item: itemName,
-                date: today
+                date: today, 
+                completed: false
             })
         }))
         console.log('connected to db')

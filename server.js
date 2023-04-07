@@ -27,10 +27,10 @@ app.post('/api/lists', async (req, res, next)=>{
     try{
         const item = req.body.newItem
         const pageDate = req.body.pageDate
-        console.log(item, pageDate)
         res.status(201).send(await List.create({
             item: item,
             date: pageDate,
+            completed: false,
         }));
     }
     catch(err){
@@ -49,6 +49,18 @@ app.delete('/api/lists/:id', async (req, res, next)=>{
     }
 })
 
+app.put('/api/lists/:id', async (req, res, next) =>{
+    try{
+        const listItem = await List.findByPk(req.params.id)
+        console.log(req.body.completed)
+        res.send(await listItem.update({
+            completed: req.body.completed
+        }))
+    }
+    catch(err){
+        next(err)
+    }
+})
 
 const init = async () =>{
     try{

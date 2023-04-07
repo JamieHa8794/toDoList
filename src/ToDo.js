@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
-import {addListItem, removeListItem} from './store'
+import {addListItem, removeListItem, completedListItem} from './store'
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -11,7 +11,6 @@ class ToDo extends Component{
         super();
         this.state = {
             list: [],
-            crossedOut: {},
             newItem: '',
         }
         this.onClick = this.onClick.bind(this)
@@ -19,17 +18,16 @@ class ToDo extends Component{
         this.onSubmit = this.onSubmit.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
     }
-    onClick(item){
-        const {crossedOut} = this.state
+    onClick(listItem){
+        const {completedListItem} = this.props
 
-        if(crossedOut[item]){
-            crossedOut[item] = false;
+        if(listItem.completed){
+            completedListItem(listItem, false)
         }
         else{
-            crossedOut[item] = true;
+            completedListItem(listItem, true)
         }
 
-        this.setState({crossedOut})
     }
     addNewItem(event){
         this.setState({newItem: event.target.value})
@@ -81,7 +79,7 @@ class ToDo extends Component{
                 >
                     <div className='toDo-Container'>
                         <h1>
-                            Shopping List:
+                            To Do:
                         </h1>
                         <div className='emptyList-message'>
                             Theres nothing on your list... add something to get started!
@@ -116,7 +114,7 @@ class ToDo extends Component{
                             {pageList.map((listItem, idx) =>{
                                 return(
                                     <div className='listItem'>
-                                    <li key={idx} className={crossedOut[listItem.item] ? 'crossedOut' : 'notCrosssedOut'} onClick={()=>onClick(listItem.item)}>
+                                    <li key={idx} className={listItem.completed ? 'crossedOut' : 'notCrosssedOut'} onClick={()=>onClick(listItem)}>
                                         {listItem.item}
                                     </li>
                                     <button onClick={()=>deleteItem(listItem)}>x</button>
@@ -149,8 +147,11 @@ const mapDispatchToProps = (dispatch) =>{
             dispatch(addListItem(newItem, pageDate))
        },
        removeListItem: (listItem) =>{
-        dispatch(removeListItem(listItem))
-   },
+            dispatch(removeListItem(listItem))
+        },
+        completedListItem: (listItem, completed) =>{
+            dispatch(completedListItem(listItem, completed))
+        },
     }
 }
 
